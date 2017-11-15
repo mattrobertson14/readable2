@@ -1,0 +1,56 @@
+.App {
+  font-family: "Josefin Slab";
+  text-align: center;
+}
+
+.App-header {
+  background-color: #222;
+  height: 60px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 2.9em;
+  margin:10px;
+}
+
+.Category {
+  padding-bottom: 15px;
+}
+
+.Category .name {
+  border-bottom: 1px solid black;
+  font-size: 28px;
+}
+
+.Category .categoryLink {
+  padding-left: 15px;
+  font-size: 14px;
+  color: grey;
+  text-decoration: none;
+}
+
+.Post {
+  border: 1px solid black;
+  padding: 10px;
+  margin: 10px 100px 10px 100px;
+  border-radius: 6px;
+}
+
+.Post .title {
+  padding: 0px;
+  margin: 0px;
+}
+
+.Comment {
+  border: 1px solid black;
+  padding: 10px;
+  margin: 10px 100px 10px 100px;
+  border-radius: 6px;
+}
+
+.Comment .author, .Comment .body {
+  padding: 2px;
+  margin: 0px;
+}
