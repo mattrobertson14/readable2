@@ -5,6 +5,8 @@ export const ADD_POST = 'ADD_POST'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const EDIT_POST = 'EDIT_POST'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
+export const SHOW_POST_FORM = 'SHOW_POST_FORM'
+export const SHOW_COMMENT_FORM = 'SHOW_COMMENT_FORM'
 
 export const addAllPosts = posts => {
   return {
@@ -56,5 +58,19 @@ export const editComment = (id, edited_comment) => {
     type: EDIT_COMMENT,
     id,
     edited_comment
+  }
+}
+
+export const showPostForm = (val) => {
+  return {
+    type: SHOW_POST_FORM,
+    val
+  }
+}
+
+export const showCommentForm = (val) => {
+  return {
+    type: SHOW_COMMENT_FORM,
+    val
   }
 }

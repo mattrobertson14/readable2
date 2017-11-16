@@ -5,14 +5,18 @@ import {
   ADD_POST,
   ADD_COMMENT,
   EDIT_POST,
-  EDIT_COMMENT
+  EDIT_COMMENT,
+  SHOW_POST_FORM,
+  SHOW_COMMENT_FORM
 } from '../actions'
 
 const initialState = {
   posts: [],
   postsById: {},
   commentsById: {},
-  categories: []
+  categories: [],
+  showPostForm: false,
+  showCommentForm: false
 }
 
 function reducer (state = initialState, action) {
@@ -96,6 +100,16 @@ function reducer (state = initialState, action) {
           ...state.commentsById,
           [action.id]: action.edited_comment
         }
+      }
+    case SHOW_POST_FORM :
+      return {
+        ...state,
+        showPostForm: action.val
+      }
+    case SHOW_COMMENT_FORM :
+      return {
+        ...state,
+        showCommentForm: action.val
       }
     default :
       return state

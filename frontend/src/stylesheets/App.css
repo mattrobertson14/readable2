@@ -15,6 +15,49 @@
   margin:10px;
 }
 
+button {
+  position: relative;
+  background-color: inherit;
+  border: 1px solid black;
+  border-radius: 6px;
+  outline: none;
+  font-size: 18px;
+  padding: 8px;
+  margin: 8px;
+}
+
+button[type="submit"] {
+  border: 1px solid green;
+  color: green;
+}
+
+button[type="cancel"] {
+  border: 1px solid red;
+  color: red;
+}
+
+button[type="back"] {
+  position:absolute;
+  left:0px;
+  top: 100px;
+  margin-left: 20px;
+}
+
+button:hover {
+  background-color: black;
+  color: white;
+}
+
+button[type="submit"]:hover {
+  background-color: green;
+  color:white;
+}
+
+button[type="cancel"]:hover {
+  background-color: red;
+  color: white;
+}
+
 .Category {
   padding-bottom: 15px;
 }
@@ -22,6 +65,7 @@
 .Category .name {
   border-bottom: 1px solid black;
   font-size: 28px;
+  margin-bottom: 2px;
 }
 
 .Category .categoryLink {
@@ -34,19 +78,32 @@
 .Post {
   border: 1px solid black;
   padding: 10px;
-  margin: 10px 100px 10px 100px;
+  margin: 10px 8% 10px 8%;
   border-radius: 6px;
 }
 
-.Post .title {
+.Post .title{
   padding: 0px;
   margin: 0px;
+}
+
+.Post .author {
+  font-size: 1.2em;
+  font-weight: bolder;
+}
+
+.Post .body {
+  margin: 4px;
+}
+
+.PostDetails .PageTitle {
+  border-bottom: 1px solid black;
 }
 
 .Comment {
   border: 1px solid black;
   padding: 10px;
-  margin: 10px 100px 10px 100px;
+  margin: 10px 8% 10px 8%;
   border-radius: 6px;
 }
 
