@@ -11,7 +11,7 @@ export const Form = (props) => {
 					</span>
 					<select id={name+d.name+"-dropdown"}>
 						{d.options.map(option => (
-							<option key={option.name} value={option.name}>
+							<option key={option.name} value={option.name.toLowerCase()}>
 								{option.name}
 							</option>
 						))}
@@ -19,7 +19,7 @@ export const Form = (props) => {
 				</div>
 			))}
 			{props.inputFields.map(i => (
-				<div className={name+i+"-input-field"}>
+				<div key={i} className={name+i+"-input-field"}>
 					<span className={name+i+"-label"}>
 						{i}
 					</span>
@@ -27,7 +27,7 @@ export const Form = (props) => {
 							 contentEditable="true"
 							 className={name+i+"-input"} 
 							 id={name+i}
-							 placeholder="Enter Text..." 
+							 placeholder={"Enter "+i+"..."}
 					/>
 				</div>
 			))}

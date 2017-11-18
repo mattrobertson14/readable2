@@ -7,8 +7,9 @@ import * as ReadableAPI from '../utils/ReadableAPI.js'
 import { connect } from 'react-redux';
 import { addAllPosts, addCategories } from '../actions';
 import Category from './Category.js';
-import { showPostForm } from '../actions'
+import { showPostForm, addPost } from '../actions'
 import { Form } from '../utils'
+import uuidv4 from 'uuid/v4'
 
 class App extends Component {
 
@@ -36,6 +37,22 @@ class App extends Component {
     this.props.dispatch(showPostForm(result))
   }
 
+  addPost = () => {
+    let id = uuidv4()
+    let timestamp = Date.now()
+    let title = document.getElementById("postTitle").innerText
+    let body = document.getElementById("postBody").innerText
+    let author = document.getElementById("postAuthor").innerText
+    let category = document.getElementById("postCategory-dropdown").value
+    console.log(`id: ${id}\ntimestamp: ${timestamp}\ntitle: ${title}\nbody: ${body}\nauthor: ${author}\ncategory: ${category}`)
+    ReadableAPI.submitPost(id, timestamp, title, body, author, category).then((res) => {
+      let newpost = {id, timestamp, title, body, author, category, voteScore: 1, deleted: false}
+      this.props.dispatch(addPost(newpost))
+    }).catch(error => {
+      console.log("new post not added")
+    })
+  }
+
   render() {
     return (
       <div className="App">
@@ -47,7 +64,7 @@ class App extends Component {
           {this.props.showPostForm?
             <Form 
               name="post"
-              submit={()=>console.log("I will soon be submitting this post!")}
+              submit={()=>this.addPost()}
               cancel={()=>this.closeForm()} 
               inputFields={["Title", "Author", "Body"]}
               dropDownFields={[{name: "Category", options: this.props.categories.map(c=>({...c, name: c.name.toUpperCase()}))}]}
