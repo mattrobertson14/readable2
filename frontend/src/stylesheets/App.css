@@ -126,11 +126,11 @@ button[type="increment"] {
   margin: 4px;
 }
 
-.Post .voteScore {
+.Post .voteScore, .Comment .voteScore {
   margin: 0 auto;
 }
 
-.PostDetails .PageTitle {
+.PostDetails h2[type="page-break"] {
   border-bottom: 1px solid black;
 }
 

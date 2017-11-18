@@ -37,6 +37,13 @@ class App extends Component {
     this.props.dispatch(showPostForm(result))
   }
 
+  clearPost = () => {
+    document.getElementById("postTitle").innerText = ""
+    document.getElementById("postBody").innerText = ""
+    document.getElementById("postAuthor").innerText = ""
+    document.getElementById("postCategory-dropdown").value = "react"
+  }
+
   addPost = () => {
     let id = uuidv4()
     let timestamp = Date.now()
@@ -44,10 +51,11 @@ class App extends Component {
     let body = document.getElementById("postBody").innerText
     let author = document.getElementById("postAuthor").innerText
     let category = document.getElementById("postCategory-dropdown").value
-    console.log(`id: ${id}\ntimestamp: ${timestamp}\ntitle: ${title}\nbody: ${body}\nauthor: ${author}\ncategory: ${category}`)
+    //console.log(`id: ${id}\ntimestamp: ${timestamp}\ntitle: ${title}\nbody: ${body}\nauthor: ${author}\ncategory: ${category}`)
     ReadableAPI.submitPost(id, timestamp, title, body, author, category).then((res) => {
       let newpost = {id, timestamp, title, body, author, category, voteScore: 1, deleted: false}
       this.props.dispatch(addPost(newpost))
+      this.clearPost()
     }).catch(error => {
       console.log("new post not added")
     })

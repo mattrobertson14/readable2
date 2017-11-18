@@ -4,8 +4,10 @@ import 'font-awesome/css/font-awesome.min.css'
 import { connect } from 'react-redux';
 import * as ReadableAPI from '../utils/ReadableAPI';
 import Comment from './Comment.js';
-import { addComments, editPost } from '../actions';
+import { addComments, editPost, showCommentForm, addComment } from '../actions';
 import { Link } from 'react-router-dom';
+import { Form } from '../utils';
+import uuidv4 from 'uuid/v4';
 
 class PostDetails extends Component {
 
@@ -17,6 +19,35 @@ class PostDetails extends Component {
 				console.log("No comments were retrieved")
 			})
 		}
+	}
+
+	openForm() {
+		this.props.dispatch(showCommentForm(true))
+	}
+
+	closeForm() {
+		this.props.dispatch(showCommentForm(false))
+	}
+
+	clearComment() {
+		document.getElementById("commentBody").innerText = ""
+    document.getElementById("commentAuthor").innerText = ""
+	}
+
+	addComment() {
+		let id = uuidv4()
+    let timestamp = Date.now()
+    let body = document.getElementById("commentBody").innerText
+    let author = document.getElementById("commentAuthor").innerText
+    let parentId = this.props.post_id
+    //console.log(`id: ${id}\ntimestamp: ${timestamp}\nbody: ${body}\nauthor: ${author}\n`)
+    ReadableAPI.addComment(id, timestamp, body, author, parentId).then((res) => {
+      let newcomment = {id, timestamp, body, author, parentId, voteScore: 1, deleted: false, parentDeleted: false}
+      this.props.dispatch(addComment(newcomment, parentId))
+      this.clearComment()
+    }).catch(error => {
+      console.log("new comment not added")
+    })
 	}
 
 	downVote(post) {
@@ -49,7 +80,7 @@ class PostDetails extends Component {
   					<i className="fa fa-arrow-left" /> Back To Main Page
   				</button>
       	</Link>
-        <h2 className="PageTitle">Post Details</h2>
+        <h2 type="page-break" className="PageTitle">Post Details</h2>
         {post && post.id?
         	<span>
 	        <h3>Title: {post.title}</h3>
@@ -62,6 +93,17 @@ class PostDetails extends Component {
 	        	{post.voteScore}
 						<button type="increment" onClick={()=>this.upVote(post)}>+</button>
 					</h4>
+					<h2 type="page-break" className="CommentsTitle">Comments</h2>
+					{this.props.showCommentForm?
+          	<Form 
+	            name="comment"
+	            submit={()=>this.addComment()}
+	            cancel={()=>this.closeForm()} 
+	            inputFields={["Author", "Body"]}
+	            dropDownFields={[]}
+	          /> :
+	          <button onClick={()=>this.openForm()}>+ Add Comment</button>
+	        }
 	      	{comments.map(c => (
 	      		<Comment comment={this.props.commentsById[c]} key={c}/>
 	      	))}
@@ -83,6 +125,7 @@ const mapStateToProps = (state, ownProps) => {
     posts: state.posts,
     postsById: state.postsById,
     commentsById: state.commentsById,
+    showCommentForm: state.showCommentForm,
     post_id: ownProps.id
   }
 }
