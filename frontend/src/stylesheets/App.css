@@ -145,7 +145,11 @@ button[type="increment"] {
   border-radius: 6px;
 }
 
-.Comment .author, .Comment .body {
+.Comment .body {
   padding: 2px;
   margin: 0px;
+}
+
+.Comment .author {
+  font-size: 1.2em;
 }

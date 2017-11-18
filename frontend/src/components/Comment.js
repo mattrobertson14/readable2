@@ -30,8 +30,9 @@ class Comment extends Component {
       <div className="Comment">
         <h4 className="body">
         	<span className="author">
-        		{this.props.comment.author}: {this.props.comment.body}
+        		{this.props.comment.author + ": "} 
         	</span>
+        	{this.props.comment.body}
         </h4>
         <h4 className="voteScore">
         	Vote Score: 
