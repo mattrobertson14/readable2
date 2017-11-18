@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Post from './Post.js';
 import { showPostForm } from '../actions';
-import { Form } from '../utils';
 
 class Category extends Component {
 
 	componentWillUnmount() {
 		let result = false
-		this.props.dispatch(showPostForm(false))
+		this.props.dispatch(showPostForm(result))
 	}
 
   render() {
@@ -32,7 +31,7 @@ class Category extends Component {
         	}
         </h2>
         {this.props.posts.filter(p => this.props.postsById[p].category === this.props.name).map(post => (
-        	<Post post={this.props.postsById[post]} key={post} />
+        	<Post id={post} key={post} />
         ))}
       </div>
     );

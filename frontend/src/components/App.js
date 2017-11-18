@@ -45,7 +45,13 @@ class App extends Component {
 
         <div className="contentContainer">
           {this.props.showPostForm?
-            <Form cancel={()=>this.closeForm()} /> :
+            <Form 
+              name="post"
+              submit={()=>console.log("I will soon be submitting this post!")}
+              cancel={()=>this.closeForm()} 
+              inputFields={["Title", "Author", "Body"]}
+              dropDownFields={[{name: "Category", options: this.props.categories.map(c=>({...c, name: c.name.toUpperCase()}))}]}
+            /> :
             <button onClick={()=>this.openForm()}>+ Add Post</button>
           }
           <Route path="/category/:name" render={(props) => (
@@ -63,6 +69,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    categories: state.categories,
     showPostForm: state.showPostForm
   }
 }

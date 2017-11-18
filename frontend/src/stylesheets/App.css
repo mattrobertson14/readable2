@@ -15,6 +15,10 @@
   margin:10px;
 }
 
+.link {
+  color: grey;
+}
+
 button {
   position: relative;
   background-color: inherit;
@@ -58,6 +62,32 @@ button[type="cancel"]:hover {
   color: white;
 }
 
+button[type="increment"] {
+  line-height:20px;
+  width: 20px;
+  padding:0px;
+}
+
+.Form div[type="dropdown"] {
+  padding: 12px;
+}
+
+.Form select {
+  padding: 8px;
+  margin-left:8px;
+  outline: none;
+}
+
+.Form div[type="input"] {
+  padding: 6px;
+  margin: 0 auto;
+  margin-top: 6px;
+  margin-bottom: 10px;
+  outline: none;
+  border-bottom: 1px solid black;
+  width: 300px;
+}
+
 .Category {
   padding-bottom: 15px;
 }
@@ -96,8 +126,16 @@ button[type="cancel"]:hover {
   margin: 4px;
 }
 
+.Post .voteScore {
+  margin: 0 auto;
+}
+
 .PostDetails .PageTitle {
   border-bottom: 1px solid black;
+}
+
+.PostDetails .no-post-found {
+  padding: 10px;
 }
 
 .Comment {

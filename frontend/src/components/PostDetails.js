@@ -4,7 +4,7 @@ import 'font-awesome/css/font-awesome.min.css'
 import { connect } from 'react-redux';
 import * as ReadableAPI from '../utils/ReadableAPI';
 import Comment from './Comment.js';
-import { addComments } from '../actions';
+import { addComments, editPost } from '../actions';
 import { Link } from 'react-router-dom';
 
 class PostDetails extends Component {
@@ -19,6 +19,26 @@ class PostDetails extends Component {
 		}
 	}
 
+	downVote(post) {
+		ReadableAPI.changeVote(post.id, "downVote").then(res => {
+			let new_post = this.props.postsById[post.id]
+			new_post.voteScore--
+			this.props.dispatch(editPost(post.id, new_post))
+		}).catch(error => {
+			console.log("Server could not be reached")
+		})
+	}
+
+	upVote(post) {
+		ReadableAPI.changeVote(post.id, "upVote").then(res => {
+			let new_post = this.props.postsById[post.id]
+			new_post.voteScore++
+			this.props.dispatch(editPost(post.id, new_post))
+		}).catch(error => {
+			console.log("Server could not be reached")
+		})	
+	}
+
   render() {
   	let post = this.props.postsById[this.props.post_id]
   	let comments = (post && post.comments? post.comments : [])
@@ -30,14 +50,29 @@ class PostDetails extends Component {
   				</button>
       	</Link>
         <h2 className="PageTitle">Post Details</h2>
-        <h3>Title: {post? post.title : null}</h3>
-        <h4>Author: {post? post.author : null}</h4>
-        <h4>Body: {post? post.body : null}</h4>
-        <h4>Category: {post && post.category? post.category.toUpperCase() : null}</h4>
-        <h4>Vote Score: {post? post.voteScore : null}</h4>
-      	{comments.map(c => (
-      		<Comment comment={this.props.commentsById[c]} key={c}/>
-      	))}
+        {post && post.id?
+        	<span>
+	        <h3>Title: {post.title}</h3>
+	        <h4>Author: {post.author}</h4>
+	        <h4>Body: {post.body}</h4>
+	        <h4>Category: {post.category? post.category.toUpperCase() : null}</h4>
+	        <h4>
+	        	Vote Score: 
+	        	<button type="increment" onClick={()=>this.downVote(post)}>-</button>
+	        	{post.voteScore}
+						<button type="increment" onClick={()=>this.upVote(post)}>+</button>
+					</h4>
+	      	{comments.map(c => (
+	      		<Comment comment={this.props.commentsById[c]} key={c}/>
+	      	))}
+	      	</span>
+	      	:
+	      	<h2 className="no-post-found">
+	      		There is no post with id: {this.props.post_id}.<br/>
+	      		Please navigate back to the home page.<br/>
+	      		Thank you
+	      	</h2>
+	      }
       </div>
     );
   }
