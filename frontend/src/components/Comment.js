@@ -25,6 +25,21 @@ class Comment extends Component {
 		})
 	}
 
+	updateComment(comment){
+  	let new_comment = comment
+  	let timestamp = Date.now()
+  	let new_body = document.getElementById("comBodyEdit").innerText
+  	if (new_body !== comment.body && new_body !== ""){
+  		new_comment.body = new_body
+  		ReadableAPI.editComment(comment.id, timestamp, new_body).then(res => {
+  			this.props.dispatch(editComment(comment.id, new_comment))
+  			this.props.dispatch(showEditComment(false,comment))
+  		}).catch(error => {
+  			console.log("Server could not be reached")
+  		})
+  	}
+  }
+
 	deleteComment(comment){
   	ReadableAPI.deleteComment(comment.id).then(res => {
   		this.props.dispatch(deleteCommentFromState(comment.id, comment.parentId))
@@ -38,7 +53,7 @@ class Comment extends Component {
       <div className="Comment">
       	{this.props.comment.editing?
       		<span>
-      		<button type="increment" title="Save Comment" className="commentSave">
+      		<button type="increment" title="Save Comment" className="commentSave" onClick={()=>this.updateComment(this.props.comment)}>
       			<i className="fa fa-check"/>
       		</button>
       		<button type="increment" title="Cancel Edit" className="commentCancel" onClick={()=>this.props.dispatch(showEditComment(false,this.props.comment))}>

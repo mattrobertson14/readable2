@@ -76,6 +76,29 @@ class PostDetails extends Component {
     this.props.dispatch(changeCommentSort(event.target.value))
   }
 
+  updatePost(post){
+  	let new_post = post
+  	let new_title = document.getElementById("postTitleEdit").innerText
+  	let new_body = document.getElementById("postBodyEdit").innerText
+  	let change = false
+  	if (new_title !== post.title || new_body !== post.body){
+  		change = true
+  	}
+  	if (new_title === "" || new_body === ""){
+  		change = false
+  	}
+  	if (change){
+  		new_post.title = new_title
+  		new_post.body = new_body
+  		ReadableAPI.editPost(post.id, new_title, new_body).then(res => {
+  			this.props.dispatch(editPost(post.id, new_post))
+  			this.props.dispatch(showEditPost(false,post))
+  		}).catch(error => {
+  			console.log("Server could not be reached")
+  		})
+  	}
+  }
+
   deletePost(post){
   	ReadableAPI.deletePost(post.id).then(res => {
   		this.props.dispatch(deletePostFromState(post.id))
@@ -105,20 +128,20 @@ class PostDetails extends Component {
         	<span>
         	{post.editing?
         		<span>
-	        		<button type="submit">Save</button>
+	        		<button type="submit" onClick={()=>this.updatePost(post)}>Save</button>
 	        		<button type="cancel" onClick={()=>this.props.dispatch(showEditPost(false,post))}>Cancel</button>
 	        		<h3>Title: </h3>
 	        		<h4 type="input"
 								 contentEditable="true"
 								 className="titleEdit" 
-								 id="titleEdit"
+								 id="postTitleEdit"
 								 dangerouslySetInnerHTML={{ __html: post.title }}
 							/>
 		        	<h4>Body: </h4>
 		        	<h4 type="input"
 								 contentEditable="true"
 								 className="bodyEdit" 
-								 id="bodyEdit"
+								 id="postBodyEdit"
 								 dangerouslySetInnerHTML={{ __html: post.body }}
 							/>
 	        	</span>

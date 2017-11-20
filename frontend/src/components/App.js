@@ -53,14 +53,16 @@ class App extends Component {
     let author = document.getElementById("postAuthor").innerText
     let category = document.getElementById("postCategory-dropdown").value
     //console.log(`id: ${id}\ntimestamp: ${timestamp}\ntitle: ${title}\nbody: ${body}\nauthor: ${author}\ncategory: ${category}`)
-    ReadableAPI.submitPost(id, timestamp, title, body, author, category).then((res) => {
-      let newpost = {id, timestamp, title, body, author, category, voteScore: 1, deleted: false}
-      this.props.dispatch(addPost(newpost))
-      this.clearPost()
-      this.props.dispatch(showPostForm(false))
-    }).catch(error => {
-      console.log("new post not added")
-    })
+     if (title !== "" && body !== "" && author !== ""){
+      ReadableAPI.submitPost(id, timestamp, title, body, author, category).then((res) => {
+        let newpost = {id, timestamp, title, body, author, category, voteScore: 1, deleted: false}
+        this.props.dispatch(addPost(newpost))
+        this.clearPost()
+        this.props.dispatch(showPostForm(false))
+      }).catch(error => {
+        console.log("new post not added")
+      })
+    }
   }
 
   changeSort = (event) => {
