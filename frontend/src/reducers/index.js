@@ -23,7 +23,6 @@ const initialState = {
   categories: [],
   showPostForm: false,
   showCommentForm: false,
-  showCommentEdit: false,
   postSort: "voteScore",
   commentSort: "voteScore"
 }
