@@ -138,6 +138,28 @@ export const editComment = (id, timestamp, body) => {
   })
 }
 
+export const deletePost = (id) => {
+  return axios.delete(`${serverAddress}/posts/${id}`, {
+    headers: {'Authorization' : 'something'},
+    withCredentials: true
+  }).then((response) => {
+    console.log(response)
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
+export const deleteComment = (id) => {
+  return axios.delete(`${serverAddress}/comments/${id}`, {
+    headers: {'Authorization' : 'something'},
+    withCredentials: true
+  }).then((response) => {
+    console.log(response)
+  }).catch((error) => {
+    console.log(error)
+  })
+}
+
 
 /* TEMPLATE FOR NEW API CALL:
 

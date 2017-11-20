@@ -7,7 +7,13 @@ import {
   EDIT_POST,
   EDIT_COMMENT,
   SHOW_POST_FORM,
-  SHOW_COMMENT_FORM
+  SHOW_COMMENT_FORM,
+  CHANGE_POST_SORT,
+  CHANGE_COMMENT_SORT,
+  SHOW_EDIT_POST,
+  SHOW_EDIT_COMMENT,
+  DELETE_POST,
+  DELETE_COMMENT
 } from '../actions'
 
 const initialState = {
@@ -16,7 +22,10 @@ const initialState = {
   commentsById: {},
   categories: [],
   showPostForm: false,
-  showCommentForm: false
+  showCommentForm: false,
+  showCommentEdit: false,
+  postSort: "voteScore",
+  commentSort: "voteScore"
 }
 
 function reducer (state = initialState, action) {
@@ -26,7 +35,8 @@ function reducer (state = initialState, action) {
       action.posts.map(post => {
         postsObject[post.id] = {
           ...postsObject[post.id],
-          ...post
+          ...post,
+          editing: false
         }
         return post
       })
@@ -38,7 +48,10 @@ function reducer (state = initialState, action) {
     case ADD_COMMENTS :
       let commentsObject = state.commentsById
       action.comments.map(comment => {
-        commentsObject[comment.id] = comment
+        commentsObject[comment.id] = {
+          ...comment,
+          editing: false
+        }
         return comment
       })
       return {
@@ -110,6 +123,64 @@ function reducer (state = initialState, action) {
       return {
         ...state,
         showCommentForm: action.val
+      }
+    case CHANGE_POST_SORT :
+      return {
+        ...state,
+        postSort: action.sortBy
+      }
+    case CHANGE_COMMENT_SORT :
+      return {
+        ...state,
+        commentSort: action.sortBy
+      }
+    case SHOW_EDIT_POST :
+      return {
+        ...state,
+        postsById: {
+          ...state.postsById,
+          [action.post.id]: {
+            ...state.postsById[action.post.id],
+            editing: action.val
+          }
+        }
+      }
+    case SHOW_EDIT_COMMENT :
+      return {
+        ...state,
+        commentsById: {
+          ...state.commentsById,
+          [action.comment.id]: {
+            ...state.commentsById[action.comment.id],
+            editing: action.val
+          }
+        }
+      }
+    case DELETE_POST :
+      let updated_posts = state.posts.filter(post => post !== action.id)
+      console.log(updated_posts)
+      let updated_postsById = state.postsById
+      delete updated_postsById[action.id]
+      console.log(updated_postsById)
+      return {
+        ...state,
+        posts: updated_posts,
+        postsById: updated_postsById
+      }
+    case DELETE_COMMENT :
+      let updated_commentsById = state.commentsById
+      delete updated_commentsById[action.id]
+      let updated_comments = state.postsById[action.pId].comments.filter(comment => comment !== action.id)
+      return {
+        ...state,
+        postsById: {
+          ...state.postsById,
+          [action.pId]: {
+            ...state.postsById[action.pId],
+            comments: updated_comments
+          }
+        },
+        commentsById: updated_commentsById,
       }
     default :
       return state

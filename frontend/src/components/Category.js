@@ -3,14 +3,8 @@ import '../stylesheets/App.css';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Post from './Post.js';
-import { showPostForm } from '../actions';
 
 class Category extends Component {
-
-	componentWillUnmount() {
-		let result = false
-		this.props.dispatch(showPostForm(result))
-	}
 
   render() {
     return (
@@ -30,8 +24,14 @@ class Category extends Component {
         		: null
         	}
         </h2>
-        {this.props.posts.filter(p => this.props.postsById[p].category === this.props.name).map(post => (
-        	<Post id={post} key={post} />
+        {this.props.posts.filter(p => (
+        		this.props.postsById[p].category === this.props.name
+        	)).sort((a,b) => {
+	      		let first = this.props.postsById[a]
+	      		let second = this.props.postsById[b]
+	      		return parseInt(second[this.props.postSort],10)-parseInt(first[this.props.postSort],10)
+	      	}).map(post => (
+        		<Post id={post} key={post} />
         ))}
       </div>
     );
@@ -43,6 +43,7 @@ const mapStateToProps = (state, ownProps) => {
     posts: state.posts,
     categories: state.categories,
     postsById: state.postsById,
+    postSort: state.postSort,
     name: ownProps.name,
     alone: ownProps.alone
   }

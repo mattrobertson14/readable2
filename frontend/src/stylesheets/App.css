@@ -19,6 +19,12 @@
   color: grey;
 }
 
+select {
+  padding: 8px;
+  margin-left:8px;
+  outline: none;
+}
+
 button {
   position: relative;
   background-color: inherit;
@@ -68,17 +74,36 @@ button[type="increment"] {
   padding:0px;
 }
 
+button[type="increment"].commentSave{
+  border: 1px solid green;
+  color: green;
+}
+
+button[type="increment"].commentCancel{
+  border: 1px solid red;
+  color: red;
+}
+
+button[type="increment"].commentSave:hover {
+  background-color: green;
+  color: white;
+}
+
+button[type="increment"].commentCancel:hover {
+  background-color: red;
+  color: white;
+}
+
+[contentEditable=true]:empty:not(:focus):before {
+  content:attr(placeholder);
+  color: black;
+}
+
 .Form div[type="dropdown"] {
   padding: 12px;
 }
 
-.Form select {
-  padding: 8px;
-  margin-left:8px;
-  outline: none;
-}
-
-.Form div[type="input"] {
+div[type="input"], h4[type="input"] {
   padding: 6px;
   margin: 0 auto;
   margin-top: 6px;

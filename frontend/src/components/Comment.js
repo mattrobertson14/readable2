@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as ReadableAPI from '../utils/ReadableAPI.js';
-import { editComment } from '../actions';
+import { editComment, showEditComment, deleteCommentFromState } from '../actions';
 
 class Comment extends Component {
 
@@ -25,21 +25,51 @@ class Comment extends Component {
 		})
 	}
 
+	deleteComment(comment){
+  	ReadableAPI.deleteComment(comment.id).then(res => {
+  		this.props.dispatch(deleteCommentFromState(comment.id, comment.parentId))
+  	}).catch(error => {
+  		console.log("Post could not be deleted")
+  	})
+  }
+
   render() {
     return (
       <div className="Comment">
-        <h4 className="body">
+      	{this.props.comment.editing?
+      		<span>
+      		<button type="increment" title="Save Comment" className="commentSave">
+      			<i className="fa fa-check"/>
+      		</button>
+      		<button type="increment" title="Cancel Edit" className="commentCancel" onClick={()=>this.props.dispatch(showEditComment(false,this.props.comment))}>
+      			<i className="fa fa-times"/>
+      		</button>
+        	<h4>Body: </h4>
+        	<h4 type="input"
+						 contentEditable="true"
+						 className="bodyEdit" 
+						 id="comBodyEdit"
+						 dangerouslySetInnerHTML={{ __html: this.props.comment.body }}
+					/>
+					</span>
+					:
+					<h4 className="body">
         	<span className="author">
+        		<button title="Edit Comment" type="increment" onClick={()=>this.props.dispatch(showEditComment(true,this.props.comment))}>
+        			<i className="fa fa-pencil"/>
+        		</button>
         		{this.props.comment.author + ": "} 
         	</span>
         	{this.props.comment.body}
-        </h4>
+        	</h4>
+      	}
         <h4 className="voteScore">
         	Vote Score: 
         	<button type="increment" onClick={()=>this.downVote(this.props.comment)}>-</button>
         	{this.props.comment.voteScore}
 					<button type="increment" onClick={()=>this.upVote(this.props.comment)}>+</button>
 				</h4>
+				{this.props.comment.editing? <button type="cancel" onClick={()=>this.deleteComment(this.props.comment)}>Delete Comment</button> : null}
       </div>
     );
   }
@@ -48,6 +78,7 @@ class Comment extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     commentsById: state.commentsById,
+    showCommentEdit: state.showCommentEdit,
     comment: ownProps.comment
   }
 }
