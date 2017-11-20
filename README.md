@@ -8,11 +8,7 @@ Let's get you started on how to run this application locally.
 * Clone or for this repo
 
 ### Starting the backend server
-* Navigate to the backend directory of this repo and use the following commands
-```
-npm install
-```
-then
+* Navigate to the backend directory of this repo and use the following command
 ```
 npm start
 ```
