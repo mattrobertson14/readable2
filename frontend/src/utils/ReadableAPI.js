@@ -1,9 +1,6 @@
 import axios from 'axios'
 
-//const serverAddress = 'http://ischyros.byu.edu:3001';
-//const serverAddress = 'http://localhost:3001';
-//const serverAddress = 'http://10.10.16.230:3001';
-const serverAddress = 'http://192.168.0.101:3001';
+const serverAddress = 'http://localhost:3001';
 
 export const getAllPosts = () => {
   return new Promise((resolve, reject)=>{
