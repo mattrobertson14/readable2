@@ -20,6 +20,7 @@ class PostDetails extends Component {
 				console.log("No comments were retrieved")
 			})
 		}
+		this.props.dispatch(showCommentForm(false))
 	}
 
 	openForm() {
