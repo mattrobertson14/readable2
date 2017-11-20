@@ -1,6 +1,6 @@
 # Readable
 
-## Welcome to the react application, readable. This application will allow you to make posts and comments on those posts.
+## Welcome to the react application, Readable. This application will allow you to make posts and make comments on those posts.
 Let's get you started on how to run this application locally.
 
 ### Getting the repo onto your machine
