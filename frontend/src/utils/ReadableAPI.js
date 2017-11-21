@@ -6,7 +6,7 @@ export const getAllPosts = () => {
   return new Promise((resolve, reject)=>{
     axios.get(serverAddress + '/posts', {
       headers: {'Authorization': 'something'},
-      withCredentials: true
+      credentials: true
     }).then(response=>{
       resolve(response.data)
     }).catch(reject)
@@ -17,7 +17,7 @@ export const getAllCategories = () => {
   return new Promise ((resolve, reject) => {
     axios.get(serverAddress + '/categories', {
       headers: {'Authorization' : 'something'},
-      withCredentials: true
+      credentials: true
     }).then(response => {
       resolve(response.data.categories)
     }).catch(reject)
@@ -28,7 +28,7 @@ export const getPost = (id) => {
   return new Promise((resolve, reject) => {
     axios.get(serverAddress + '/posts/' + id, {
       headers: {'Authorization' : 'something'},
-      withCredentials: true
+      credentials: true
     }).then(response => {
       resolve(response.data)
     }).catch(reject)
@@ -39,7 +39,7 @@ export const getPostComments = (id) => {
   return new Promise((resolve, reject) => {
     axios.get(serverAddress + '/posts/' + id + '/comments', {
       headers: {'Authorization' : 'something'},
-      withCredentials: true
+      credentials: true
     }).then(response => {
       resolve(response.data)
     }).catch(reject)
@@ -56,7 +56,7 @@ export const submitPost = (id, timestamp, title, body, author, category) => {
     category
   }, {
     headers: {'Authorization' : 'something'},
-    withCredentials: true
+    credentials: true
   }).then((response) => {
     console.log(response)
   }).catch((error) => {
@@ -69,7 +69,7 @@ export const changeVote = (id, option) => {
     option // This should be a string: "upVote" or "downVote"
   }, {
     headers: {'Authorization' : 'something'},
-    withCredentials: true
+    credentials: true
   }).then((response) => {
     console.log(response)
   }).catch((error) => {
@@ -86,7 +86,7 @@ export const addComment = (id, timestamp, body, author, parentId) => {
     parentId
   }, {
     headers: {'Authorization' : 'something'},
-    withCredentials: true
+    credentials: true
   }).then((response) => {
     console.log(response)
   }).catch((error) => {
@@ -99,7 +99,7 @@ export const changeVoteComment = (id, option) => {
     option
   }, {
     headers: {'Authorization' : 'something'},
-    withCredentials: true
+    credentials: true
   }).then((response) => {
     console.log(response)
   }).catch((error) => {
@@ -113,7 +113,7 @@ export const editPost = (id, title, body) => {
     body
   }, {
     headers: {'Authorization' : 'something'},
-    withCredentials: true
+    credentials: true
   }).then((response) => {
     console.log(response)
   }).catch((error) => {
@@ -127,7 +127,7 @@ export const editComment = (id, timestamp, body) => {
     body
   }, {
     headers: {'Authorization' : 'something'},
-    withCredentials: true
+    credentials: true
   }).then((response) => {
     console.log(response)
   }).catch((error) => {
@@ -138,7 +138,7 @@ export const editComment = (id, timestamp, body) => {
 export const deletePost = (id) => {
   return axios.delete(`${serverAddress}/posts/${id}`, {
     headers: {'Authorization' : 'something'},
-    withCredentials: true
+    credentials: true
   }).then((response) => {
     console.log(response)
   }).catch((error) => {
@@ -149,7 +149,7 @@ export const deletePost = (id) => {
 export const deleteComment = (id) => {
   return axios.delete(`${serverAddress}/comments/${id}`, {
     headers: {'Authorization' : 'something'},
-    withCredentials: true
+    credentials: true
   }).then((response) => {
     console.log(response)
   }).catch((error) => {
