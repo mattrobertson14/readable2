@@ -1,29 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as ReadableAPI from '../utils/ReadableAPI.js';
-import { editComment, showEditComment, deleteCommentFromState } from '../actions';
+import { changeCommentVote, updateComment, showEditComment, deleteComment } from '../actions';
 
 class Comment extends Component {
-
-	downVote(comment) {
-		ReadableAPI.changeVoteComment(comment.id, "downVote").then(res => {
-			let new_post = this.props.commentsById[comment.id]
-			new_post.voteScore--
-			this.props.dispatch(editComment(comment.id, new_post))
-		}).catch(error => {
-			console.log("Server could not be reached")
-		})
-	}
-
-	upVote(comment) {
-		ReadableAPI.changeVoteComment(comment.id, "upVote").then(res => {
-			let new_post = this.props.commentsById[comment.id]
-			new_post.voteScore++
-			this.props.dispatch(editComment(comment.id, new_post))
-		}).catch(error => {
-			console.log("Server could not be reached")
-		})
-	}
 
 	updateComment(comment){
   	let new_comment = comment
@@ -31,21 +10,9 @@ class Comment extends Component {
   	let new_body = document.getElementById("comBodyEdit").innerText
   	if (new_body !== comment.body && new_body !== ""){
   		new_comment.body = new_body
-  		ReadableAPI.editComment(comment.id, timestamp, new_body).then(res => {
-  			this.props.dispatch(editComment(comment.id, new_comment))
-  			this.props.dispatch(showEditComment(false,comment))
-  		}).catch(error => {
-  			console.log("Server could not be reached")
-  		})
+      let details = { new_comment, timestamp, new_body }
+  		this.props.dispatch(updateComment(comment, details))
   	}
-  }
-
-	deleteComment(comment){
-  	ReadableAPI.deleteComment(comment.id).then(res => {
-  		this.props.dispatch(deleteCommentFromState(comment.id, comment.parentId))
-  	}).catch(error => {
-  		console.log("Post could not be deleted")
-  	})
   }
 
   render() {
@@ -80,11 +47,17 @@ class Comment extends Component {
       	}
         <h4 className="voteScore">
         	Vote Score: 
-        	<button type="increment" onClick={()=>this.downVote(this.props.comment)}>-</button>
+        	<button type="increment" 
+                  onClick={()=>this.props.dispatch(changeCommentVote(this.props.comment, "downVote"))}>-</button>
         	{this.props.comment.voteScore}
-					<button type="increment" onClick={()=>this.upVote(this.props.comment)}>+</button>
+					<button type="increment" 
+                  onClick={()=>this.props.dispatch(changeCommentVote(this.props.comment, "upVote"))}>+</button>
 				</h4>
-				{this.props.comment.editing? <button type="cancel" onClick={()=>this.deleteComment(this.props.comment)}>Delete Comment</button> : null}
+				{this.props.comment.editing? 
+          <button type="cancel" 
+                  onClick={()=>this.props.dispatch(deleteComment(this.props.comment))}>
+                  Delete Comment</button> : null
+        }
       </div>
     );
   }

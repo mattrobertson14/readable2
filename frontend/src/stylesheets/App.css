@@ -123,8 +123,7 @@ div[type="input"], h4[type="input"] {
   margin-bottom: 2px;
 }
 
-.Category .categoryLink {
-  padding-left: 15px;
+.categoryLink {
   font-size: 14px;
   color: grey;
   text-decoration: none;
@@ -153,6 +152,12 @@ div[type="input"], h4[type="input"] {
 
 .Post .voteScore, .Comment .voteScore {
   margin: 0 auto;
+}
+
+.Post .commentCount {
+  padding: 0;
+  margin: 2px;
+
 }
 
 .PostDetails h2[type="page-break"] {

@@ -9,20 +9,11 @@ class Category extends Component {
   render() {
     return (
       <div className="Category">
-      	{this.props.alone? 
-      		<Link to="/">
-    				<button type="back"><i className="fa fa-arrow-left" /> Back To All</button>
-    			</Link>
-    			: null
-      	}
+    		<Link to="/">
+  				<button type="back"><i className="fa fa-arrow-left" /> Back To All</button>
+  			</Link>
         <h2 className="name">
         	{this.props.name.toUpperCase()}
-        	{!this.props.alone?
-        		<Link className="categoryLink" to={"/category/"+this.props.name}>
-        			View Only {this.props.name.toUpperCase()} <i className="fa fa-arrow-right" />
-        		</Link>
-        		: null
-        	}
         </h2>
         {this.props.posts.filter(p => (
         		this.props.postsById[p].category === this.props.name

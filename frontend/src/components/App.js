@@ -3,29 +3,18 @@ import { Route } from 'react-router-dom';
 import PostDetails from './PostDetails.js';
 import Home from './Home.js'
 import '../stylesheets/App.css';
-import * as ReadableAPI from '../utils/ReadableAPI.js'
 import { connect } from 'react-redux';
-import { addAllPosts, addCategories } from '../actions';
+import { getAllPosts, getAllCategories } from '../actions';
 import Category from './Category.js';
-import { showPostForm, addPost, changePostSort } from '../actions'
+import { showPostForm, submitPost, changePostSort } from '../actions'
 import { Form } from '../utils'
 import uuidv4 from 'uuid/v4'
 
 class App extends Component {
 
   componentDidMount(){
-    ReadableAPI.getAllCategories().then (res => {
-      this.props.dispatch(addCategories(res))
-    }).catch(error => {
-      console.log("No categories were retrieved")
-    })
-
-    ReadableAPI.getAllPosts().then( res => {
-      res.filter(post => !post.deleted)
-      this.props.dispatch(addAllPosts(res))
-    }).catch(error=>{
-      console.log("No posts were retrieved")
-    })
+    this.props.dispatch(getAllCategories())
+    this.props.dispatch(getAllPosts())
   }
 
   closeForm = () => {
@@ -38,13 +27,6 @@ class App extends Component {
     this.props.dispatch(showPostForm(result))
   }
 
-  clearPost = () => {
-    document.getElementById("postTitle").innerText = ""
-    document.getElementById("postBody").innerText = ""
-    document.getElementById("postAuthor").innerText = ""
-    document.getElementById("postCategory-dropdown").value = "react"
-  }
-
   addPost = () => {
     let id = uuidv4()
     let timestamp = Date.now()
@@ -54,14 +36,8 @@ class App extends Component {
     let category = document.getElementById("postCategory-dropdown").value
     //console.log(`id: ${id}\ntimestamp: ${timestamp}\ntitle: ${title}\nbody: ${body}\nauthor: ${author}\ncategory: ${category}`)
      if (title !== "" && body !== "" && author !== ""){
-      ReadableAPI.submitPost(id, timestamp, title, body, author, category).then((res) => {
-        let newpost = {id, timestamp, title, body, author, category, voteScore: 1, deleted: false}
-        this.props.dispatch(addPost(newpost))
-        this.clearPost()
-        this.props.dispatch(showPostForm(false))
-      }).catch(error => {
-        console.log("new post not added")
-      })
+      let newpost = {id, timestamp, title, body, author, category, voteScore: 1, deleted: false}
+      this.props.dispatch(submitPost(newpost))
     }
   }
 
@@ -97,10 +73,10 @@ class App extends Component {
               </h3>
             </span>
           }
-          <Route path="/category/:name" render={(props) => (
-            <Category alone={true} name={props.match.params.name} />
+          <Route exact path="/:category" render={(props) => (
+            <Category alone={true} name={props.match.params.category} />
           )} />
-          <Route path="/details/:id" render={(props) => (
+          <Route path="/:category/:id" render={(props) => (
             <PostDetails id={props.match.params.id} />
           )}/>
           <Route exact path="/" component={Home} />

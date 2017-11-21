@@ -4,7 +4,7 @@ import 'font-awesome/css/font-awesome.min.css'
 import { connect } from 'react-redux';
 import * as ReadableAPI from '../utils/ReadableAPI';
 import Comment from './Comment.js';
-import { addComments, editPost, showCommentForm, addComment, changeCommentSort,
+import { changePostVote, editPost, showCommentForm, addComment, changeCommentSort,
 					showEditPost, deletePostFromState } from '../actions';
 import { Link, withRouter } from 'react-router-dom';
 import { Form } from '../utils';
@@ -13,13 +13,6 @@ import uuidv4 from 'uuid/v4';
 class PostDetails extends Component {
 
 	componentDidMount() {
-		if (this.props.post_id !== undefined){
-			ReadableAPI.getPostComments(this.props.post_id).then(res => {
-				this.props.dispatch(addComments(res, this.props.post_id))
-			}).catch(error => {
-				console.log("No comments were retrieved")
-			})
-		}
 		this.props.dispatch(showCommentForm(false))
 	}
 
@@ -43,34 +36,16 @@ class PostDetails extends Component {
     let author = document.getElementById("commentAuthor").innerText
     let parentId = this.props.post_id
     //console.log(`id: ${id}\ntimestamp: ${timestamp}\nbody: ${body}\nauthor: ${author}\n`)
-    ReadableAPI.addComment(id, timestamp, body, author, parentId).then((res) => {
-      let newcomment = {id, timestamp, body, author, parentId, voteScore: 1, deleted: false, parentDeleted: false}
-      this.props.dispatch(addComment(newcomment, parentId))
-      this.clearComment()
-      this.props.dispatch(showCommentForm(false))
-    }).catch(error => {
-      console.log("new comment not added")
-    })
-	}
-
-	downVote(post) {
-		ReadableAPI.changeVote(post.id, "downVote").then(res => {
-			let new_post = this.props.postsById[post.id]
-			new_post.voteScore--
-			this.props.dispatch(editPost(post.id, new_post))
-		}).catch(error => {
-			console.log("Server could not be reached")
-		})
-	}
-
-	upVote(post) {
-		ReadableAPI.changeVote(post.id, "upVote").then(res => {
-			let new_post = this.props.postsById[post.id]
-			new_post.voteScore++
-			this.props.dispatch(editPost(post.id, new_post))
-		}).catch(error => {
-			console.log("Server could not be reached")
-		})	
+		if (body !== "" && author !== ""){
+	    ReadableAPI.addComment(id, timestamp, body, author, parentId).then((res) => {
+	      let newcomment = {id, timestamp, body, author, parentId, voteScore: 1, deleted: false, parentDeleted: false}
+	      this.props.dispatch(addComment(newcomment, parentId))
+	      this.clearComment()
+	      this.props.dispatch(showCommentForm(false))
+	    }).catch(error => {
+	      console.log("new comment not added")
+	    })
+	   }
 	}
 
 	changeSort = (event) => {
@@ -157,9 +132,11 @@ class PostDetails extends Component {
 	        <h4>Timestamp: {makeDateReadable(post.timestamp)}</h4>
 	        <h4>
 	        	Vote Score: 
-	        	<button type="increment" onClick={()=>this.downVote(post)}>-</button>
+	        	<button type="increment" 
+	        					onClick={()=>this.props.dispatch(changePostVote(post, "downVote"))}>-</button>
 	        	{post.voteScore}
-						<button type="increment" onClick={()=>this.upVote(post)}>+</button>
+						<button type="increment" 
+										onClick={()=>this.props.dispatch(changePostVote(post, "upVote"))}>+</button>
 					</h4>
 					{post.editing? <button type="cancel" onClick={()=>this.deletePost(post)}>Delete Post</button> : null}
 					<h2 type="page-break" className="CommentsTitle">Comments</h2>
