@@ -82,6 +82,17 @@ export const addPost = post => {
   }
 }
 
+export const submitComment = (comment) => {
+  return function(dispatch) {
+    return ReadableAPI.addComment(comment.id, comment.timestamp, comment.body, comment.author, comment.parentId).then(res => {
+      dispatch(addComment(comment, comment.parentId))
+      dispatch(showCommentForm(false))
+    }).catch(error => {
+      console.log("New comment not added")
+    })
+  }
+}
+
 export const addComment = (comment, p_id) => {
   return {
     type: ADD_COMMENT,
@@ -99,6 +110,27 @@ export const changePostVote = (post, type) => {
       dispatch(editPost(post.id, new_post))
     }).catch(error => {
       console.log("Server could not be reached")
+    })
+  }
+}
+
+export const updatePost = post => {
+  return function(dispatch){
+    return ReadableAPI.editPost(post.id, post.title, post.body).then(res => {
+      dispatch(editPost(post.id, post))
+      dispatch(showEditPost(false, post))
+    }).catch(error => {
+      console.log("Server could not be reached")
+    })
+  }
+}
+
+export const deletePost = (post) => {
+  return function(dispatch){
+    return ReadableAPI.deletePost(post.id).then(res => {
+      dispatch(deletePostFromState(post.id))
+    }).catch(error => {
+      console.log("Post could not be deleted")
     })
   }
 }

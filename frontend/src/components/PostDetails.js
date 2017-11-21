@@ -4,8 +4,8 @@ import 'font-awesome/css/font-awesome.min.css'
 import { connect } from 'react-redux';
 import * as ReadableAPI from '../utils/ReadableAPI';
 import Comment from './Comment.js';
-import { changePostVote, editPost, showCommentForm, addComment, changeCommentSort,
-					showEditPost, deletePostFromState } from '../actions';
+import { changePostVote, updatePost, showCommentForm, submitComment, changeCommentSort,
+					showEditPost, deletePost } from '../actions';
 import { Link, withRouter } from 'react-router-dom';
 import { Form } from '../utils';
 import uuidv4 from 'uuid/v4';
@@ -24,11 +24,6 @@ class PostDetails extends Component {
 		this.props.dispatch(showCommentForm(false))
 	}
 
-	clearComment() {
-		document.getElementById("commentBody").innerText = ""
-    document.getElementById("commentAuthor").innerText = ""
-	}
-
 	addComment() {
 		let id = uuidv4()
     let timestamp = Date.now()
@@ -37,15 +32,9 @@ class PostDetails extends Component {
     let parentId = this.props.post_id
     //console.log(`id: ${id}\ntimestamp: ${timestamp}\nbody: ${body}\nauthor: ${author}\n`)
 		if (body !== "" && author !== ""){
-	    ReadableAPI.addComment(id, timestamp, body, author, parentId).then((res) => {
-	      let newcomment = {id, timestamp, body, author, parentId, voteScore: 1, deleted: false, parentDeleted: false}
-	      this.props.dispatch(addComment(newcomment, parentId))
-	      this.clearComment()
-	      this.props.dispatch(showCommentForm(false))
-	    }).catch(error => {
-	      console.log("new comment not added")
-	    })
-	   }
+			let newcomment = {id, timestamp, body, author, parentId, voteScore: 1, deleted: false, parentDeleted: false}
+	    this.props.dispatch(submitComment(newcomment))
+	  }
 	}
 
 	changeSort = (event) => {
@@ -66,22 +55,8 @@ class PostDetails extends Component {
   	if (change){
   		new_post.title = new_title
   		new_post.body = new_body
-  		ReadableAPI.editPost(post.id, new_title, new_body).then(res => {
-  			this.props.dispatch(editPost(post.id, new_post))
-  			this.props.dispatch(showEditPost(false,post))
-  		}).catch(error => {
-  			console.log("Server could not be reached")
-  		})
+  		this.props.dispatch(updatePost(new_post))
   	}
-  }
-
-  deletePost(post){
-  	ReadableAPI.deletePost(post.id).then(res => {
-  		this.props.dispatch(deletePostFromState(post.id))
-  		this.props.history.push("/")
-  	}).catch(error => {
-  		console.log("Post could not be deleted")
-  	})
   }
 
   render() {
@@ -94,14 +69,15 @@ class PostDetails extends Component {
   					<i className="fa fa-arrow-left" /> Back To Main Page
   				</button>
       	</Link>
-        <h2 type="page-break" className="PageTitle">
-					<button title="Edit Post" type="increment" onClick={()=>this.props.dispatch(showEditPost(true,post))}>
-						<i className="fa fa-pencil"/>
-					</button>
-					Post Details
-				</h2>
         {post && post.id?
         	<span>
+        	<h2 type="page-break" className="PageTitle">
+						{!post.editing? 
+							<button title="Edit Post" type="increment" onClick={()=>this.props.dispatch(showEditPost(true,post))}>
+								<i className="fa fa-pencil"/>
+							</button> : null }
+						Post Details
+					</h2>
         	{post.editing?
         		<span>
 	        		<button type="submit" onClick={()=>this.updatePost(post)}>Save</button>
@@ -138,7 +114,7 @@ class PostDetails extends Component {
 						<button type="increment" 
 										onClick={()=>this.props.dispatch(changePostVote(post, "upVote"))}>+</button>
 					</h4>
-					{post.editing? <button type="cancel" onClick={()=>this.deletePost(post)}>Delete Post</button> : null}
+					{post.editing? <button type="cancel" onClick={()=>this.props.dispatch(deletePost(post)).then(res=>this.props.history.push("/"))}>Delete Post</button> : null}
 					<h2 type="page-break" className="CommentsTitle">Comments</h2>
 					{this.props.showCommentForm?
           	<Form 
@@ -168,11 +144,16 @@ class PostDetails extends Component {
 	      	))}
 	      	</span>
 	      	:
-	      	<h2 className="no-post-found">
-	      		There is no post with id: {this.props.post_id}.<br/>
-	      		Please navigate back to the home page.<br/>
-	      		Thank you
-	      	</h2>
+	      	<span>
+		      	<h2 type="page-break" className="PageTitle">
+							Post Details
+						</h2>
+		      	<h2 className="no-post-found">
+		      		There is no post with id: {this.props.post_id}.<br/>
+		      		Please navigate back to the home page.<br/>
+		      		Thank you
+		      	</h2>
+		      </span>
 	      }
       </div>
     );
