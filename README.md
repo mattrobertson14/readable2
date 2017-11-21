@@ -10,7 +10,10 @@ Let's get you started on how to run this application locally.
 ### Starting the backend server
 * Navigate to the backend directory of this repo and use the following command
 ```
-npm start
+npm install
+```
+```
+node server
 ```
 * Note: it should run the server on port 3001 by default
 
